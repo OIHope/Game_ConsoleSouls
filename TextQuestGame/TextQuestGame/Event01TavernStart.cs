@@ -53,7 +53,8 @@ namespace TextQuestGame
                     Console.WriteLine("This might not end well...");
                     Console.ReadKey();
 
-                    CombatMechanic.Combat(false, "Tavern Thug", 10, 2, 0, 2);
+                    int[] tmpAP = {0,0,1,0,1 };
+                    CombatMechanic.Combat(false, "Tavern Thug", 10, 2, 0, 2, tmpAP);
 
                     Console.Clear();
                     Console.WriteLine("You look and this poor guy and feel that people are about to attack you.");

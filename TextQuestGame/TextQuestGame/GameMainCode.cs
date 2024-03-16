@@ -1,6 +1,6 @@
 ﻿namespace TextQuestGame
 {
-    class GameMainCode
+    class Master
     {
         
         public static PlayerStats playerStats = new PlayerStats();
@@ -15,10 +15,12 @@
             switch(event02ChooseMain)
             {
                 case ("Port"):
-                    CombatMechanic.Combat(true,"",0,0,0,5);
+                    int[] tmpAP = {0,0,1,1,2 };
+                    CombatMechanic.Combat(true, "", 0, 0, 0, 5, tmpAP);
                     break;
                 case ("Street"):
-                    CombatMechanic.Combat(true, "", 0, 0, 0, 5);
+                    int[] tmpAP2 = { 1, 0, 1, 0, 2 };
+                    CombatMechanic.Combat(true, "", 0, 0, 0, 5, tmpAP2);
                     break;
             }
         }

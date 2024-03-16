@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\VisualStudioCode\\addTask_QuestGame\\TextQuestGame\\TextQuestGame\\TextQuestGame.csproj",
+      "projectUniqueName": "D:\\VisualStudioCode\\addTask_QuestGame\\Game_ConsoleSouls\\TextQuestGame\\TextQuestGame\\TextQuestGame.csproj",
       "projectName": "TextQuestGame",
-      "projectPath": "D:\\VisualStudioCode\\addTask_QuestGame\\TextQuestGame\\TextQuestGame\\TextQuestGame.csproj",
+      "projectPath": "D:\\VisualStudioCode\\addTask_QuestGame\\Game_ConsoleSouls\\TextQuestGame\\TextQuestGame\\TextQuestGame.csproj",
       "packagesPath": "C:\\Users\\oimod\\.nuget\\packages\\",
-      "outputPath": "D:\\VisualStudioCode\\addTask_QuestGame\\TextQuestGame\\TextQuestGame\\obj\\",
+      "outputPath": "D:\\VisualStudioCode\\addTask_QuestGame\\Game_ConsoleSouls\\TextQuestGame\\TextQuestGame\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

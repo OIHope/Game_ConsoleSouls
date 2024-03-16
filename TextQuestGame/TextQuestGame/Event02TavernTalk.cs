@@ -109,7 +109,8 @@ namespace TextQuestGame
             Console.ReadKey();
             Console.Clear();
 
-            CombatMechanic.Combat(false, "Creature", 8, 2, 0, 5);
+            int[] tmpAP = { 0, 2, 0, 0, 2 };
+            CombatMechanic.Combat(false, "Creature", 8, 2, 0, 5, tmpAP);
         }
     }
 }

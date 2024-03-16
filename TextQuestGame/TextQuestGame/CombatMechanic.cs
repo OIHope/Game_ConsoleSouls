@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-
-namespace TextQuestGame
+﻿namespace TextQuestGame
 {
-    
+
     class CombatMechanic
     {
 
-        public static void Combat(bool randomEnemy, string enemyName, int enemyHP, int enemyDMG, int enemyArmor, int count)
+        public static void Combat(bool randomEnemy, string enemyName, int enemyHP, int enemyDMG, int enemyArmor, int count, int[]enemyPattern)
         {
             Random random = new Random();
 
@@ -20,6 +13,8 @@ namespace TextQuestGame
             int enDMG = 0;
             int enArmor = 0;
             int enCount = count;
+            int[] aP = new int[5];
+            string[] enAP = new string[5];
 
             if (randomEnemy)
             {
@@ -27,6 +22,11 @@ namespace TextQuestGame
                 enHP = random.Next(10,20);
                 enDMG = random.Next(3, 11);
                 enArmor = random.Next(0, 3);
+                aP[0] = 0;
+                aP[1] = 0;
+                aP[2] = 1;
+                aP[3] = 0;
+                aP[4] = 2;
             }
             else
             {
@@ -34,50 +34,51 @@ namespace TextQuestGame
                 enHP = enemyHP;
                 enDMG = enemyDMG;
                 enArmor = enemyArmor;
+                aP[0] = enemyPattern[0];
+                aP[1] = enemyPattern[1];
+                aP[2] = enemyPattern[2];
+                aP[3] = enemyPattern[3];
+                aP[4] = enemyPattern[4];
+            }
+            for (int j = 0; j < aP.Length; j++)
+            {
+                string tmpName = "";
+                if (aP[j] == 0) tmpName = "Attack";
+                else if (aP[j] == 1) tmpName = "Deffend";
+                else if (aP[j] == 2) tmpName = "Dodge";
+                enAP[j] = tmpName;
             }
 
-            int plArmor = GameMainCode.playerStats.playerArmor;
-            int plPotion = GameMainCode.playerStats.playerPotions;
+            int plArmor = Master.playerStats.playerArmor;
+            int plPotion = Master.playerStats.playerPotions;
 
-            int plLvl2XP = GameMainCode.playerStats.xpLvl2;
-            int plLvl3XP = GameMainCode.playerStats.xpLvl3;
-            int plLvl4XP = GameMainCode.playerStats.xpLvl4;
-            int plLvl5XP = GameMainCode.playerStats.xpLvl5;
+            int plLvl2XP = Master.playerStats.xpLvl2;
+            int plLvl3XP = Master.playerStats.xpLvl3;
+            int plLvl4XP = Master.playerStats.xpLvl4;
+            int plLvl5XP = Master.playerStats.xpLvl5;
 
-
-
+            int i = 0;
 
             while ((enHP > 0) && (enCount > 0))
             {
-                string enAP = "";
-                int enNumAP = random.Next(0, 10);
-                if (enNumAP >= 0 && enNumAP < 6)
-                    enAP = "Attack";
-                else if (enNumAP >= 6 && enNumAP < 8)
-                    enAP = "Deffend";
-                else if (enNumAP >= 8 && enNumAP < 10)
-                    enAP = "Dodge";
+                if (i > enAP.Length-1) i = 0;
 
-                if (GameMainCode.playerStats.playerHP > GameMainCode.playerStats.plMaxHP) GameMainCode.playerStats.playerHP = GameMainCode.playerStats.plMaxHP;
+                if (Master.playerStats.playerHP > Master.playerStats.plMaxHP) Master.playerStats.playerHP = Master.playerStats.plMaxHP;
                 if (plPotion < 0) plPotion = 0;
 
                 Console.Clear();
 
-                Console.WriteLine($"   {enName} count: {enCount}");
+                Console.WriteLine($"    {enName} count: {enCount}");
                 Console.WriteLine("===========================");
-                Console.WriteLine($"||  HP = {enHP}");
-                Console.WriteLine($"||  Armor = {enemyArmor}");
-                Console.WriteLine($"||  DMG = {enDMG}");
-                Console.WriteLine($"||  Next move = {enAP}");
+                Console.WriteLine($"||  HP = {enHP}  ||  Armor = {enemyArmor} ||  DMG = {enDMG}");
+                Console.WriteLine($"||  Next move = {enAP[i]}");
                 Console.WriteLine("===========================");
 
                 Console.WriteLine("\n---VS---\n");
 
-                Console.WriteLine("   Player Lvl "+ GameMainCode.playerStats.playerLevel + " EXP: "+ GameMainCode.playerStats.playerXP);
+                Console.WriteLine("     Kvout Lvl "+ Master.playerStats.playerLevel + " EXP: "+ Master.playerStats.playerXP);
                 Console.WriteLine("===========================");
-                Console.WriteLine($"||  HP = {GameMainCode.playerStats.playerHP}");
-                Console.WriteLine($"||  Armor = {plArmor}");
-                Console.WriteLine($"||  DMG = {GameMainCode.playerStats.playerDMG}");
+                Console.WriteLine($"||  HP = {Master.playerStats.playerHP}  ||  Armor = {plArmor}  ||  DMG = {Master.playerStats.playerDMG}");
                 Console.WriteLine($"||  Potions = {plPotion}");
                 Console.WriteLine("===========================");
                 Console.WriteLine("===Actions:\n");
@@ -90,16 +91,16 @@ namespace TextQuestGame
                 string inputValue = Console.ReadLine();
                 if (inputValue == "1")
                 {
-                    int i = random.Next(0, 3);
+                    int rnd = random.Next(0, 3);
                     //attack
-                    switch (enAP)
+                    switch (enAP[i])
                     {
                         case "Attack":
-                            if (i == 0)
+                            if (rnd == 0)
                             {
                                 int ddPL = DDDefend(enDMG, plArmor);
-                                int ddEN = DDDefend(GameMainCode.playerStats.playerDMG, enArmor);
-                                GameMainCode.playerStats.playerHP -= ddPL;
+                                int ddEN = DDDefend(Master.playerStats.playerDMG, enArmor);
+                                Master.playerStats.playerHP -= ddPL;
                                 enHP -= ddEN;
 
                                 Console.WriteLine($"You both charge! \n{enName} hit your chin and deal {ddPL} dammage\n" +
@@ -107,7 +108,7 @@ namespace TextQuestGame
                                 Console.WriteLine("\n---press Enter---");
                                 Console.ReadKey();
                             }
-                            else if (i == 1)
+                            else if (rnd == 1)
                             {
                                 Console.WriteLine($"You both charge! \n{enName} slips on the flour and deal no dammage\n" +
                                     $"You stop and laugh at {enName} and only deal some emotional damage\n" +
@@ -117,7 +118,7 @@ namespace TextQuestGame
                             }
                             else
                             {
-                                int ddEN = DDCRITAtack(GameMainCode.playerStats.playerDMG, enArmor);
+                                int ddEN = DDCRITAtack(Master.playerStats.playerDMG, enArmor);
                                 enHP -= ddEN;
                                 Console.WriteLine($"You both charge! And so happen that you make the right move\n" +
                                     $"and dodge enemies attack. Then you land your CRITICAL strike, dealing {ddEN} damage!");
@@ -126,9 +127,9 @@ namespace TextQuestGame
                             }
                             break;
                         case "Deffend":
-                            if (i == 0)
+                            if (rnd == 0)
                             {
-                                int ddEN = DDDefend(GameMainCode.playerStats.playerDMG, enArmor);
+                                int ddEN = DDDefend(Master.playerStats.playerDMG, enArmor);
                                 enHP -= ddEN;
                                 Console.WriteLine($"You charge! \n{enName} is trying to block your attack\n" +
                                     $"At the last moment you spot a gap in his deffence and land your hit on the weak spot\n" +
@@ -137,7 +138,7 @@ namespace TextQuestGame
                                     $"---press Enter---");
                                 Console.ReadKey();
                             }
-                            else if (i >= 1)
+                            else if (rnd >= 1)
                             {
                                 Console.WriteLine($"You charge! But maybe is't of your overconfidence, but your leg slips\n" +
                                     $"and you fall on the flour followed by {enName}`s laugh " +
@@ -147,15 +148,15 @@ namespace TextQuestGame
                             }
                             break;
                         case "Dodge":
-                            if (i == 0)
+                            if (rnd == 0)
                             {
                                 Console.WriteLine($"{enName} dogded you attack!");
                                 Console.WriteLine("\n---press Enter---");
                                 Console.ReadKey();
                             }
-                            else if (i == 1)
+                            else if (rnd == 1)
                             {
-                                int ddEN = DDDefend(GameMainCode.playerStats.playerDMG, enArmor);
+                                int ddEN = DDDefend(Master.playerStats.playerDMG, enArmor);
                                 enHP -= ddEN;
                                 Console.WriteLine($"You manage to hit {enName} with just a tip of your weapon \nand deal {ddEN} damage");
                                 Console.WriteLine("\n---press Enter---");
@@ -163,7 +164,7 @@ namespace TextQuestGame
                             }
                             else
                             {
-                                int ddEN = DDCRITAtack(GameMainCode.playerStats.playerDMG, enArmor);
+                                int ddEN = DDCRITAtack(Master.playerStats.playerDMG, enArmor);
                                 enHP -= ddEN;
                                 Console.WriteLine($"{enName} makes a very predictable move and you land a CRITICAL hit, \ndealing {ddEN} damage!");
                                 Console.WriteLine("\n---press Enter---");
@@ -174,21 +175,21 @@ namespace TextQuestGame
                 }
                 else if (inputValue == "2")
                 {
-                    int i = random.Next(0, 3);
+                    int rnd = random.Next(0, 3);
                     //deffend
-                    switch (enAP)
+                    switch (enAP[i])
                     {
                         case "Attack":
-                            if (i == 0)
+                            if (rnd == 0)
                             {
                                 int ddPL = DDDefend(enDMG, plArmor);
-                                GameMainCode.playerStats.playerHP -= ddPL;
+                                Master.playerStats.playerHP -= ddPL;
                                 Console.WriteLine($"Enemies attack is blocked, but you notice blood on your hands.\n" +
                                     $"{enName} seems to get you and deal {ddPL} damage");
                                 Console.WriteLine("\n---press Enter---");
                                 Console.ReadKey();
                             }
-                            else if (i == 1)
+                            else if (rnd == 1)
                             {
                                 Console.WriteLine($"Pefect block!\n" +
                                     $"NO damage dealt!");
@@ -198,7 +199,7 @@ namespace TextQuestGame
                             else
                             {
                                 int ddPL = DDCRITDefend(enDMG, plArmor);
-                                GameMainCode.playerStats.playerHP -= ddPL;
+                                Master.playerStats.playerHP -= ddPL;
                                 Console.WriteLine($"As {enName} attacks you manage to twist your weapon \n" +
                                     $"and get a perfect angle for blocking enemies attack!\n" +
                                     $"{ddPL} damage received");
@@ -220,18 +221,18 @@ namespace TextQuestGame
                 }
                 else if (inputValue == "3")
                 {
-                    int i = random.Next(0, 3);
+                    int rnd = random.Next(0, 3);
                     //dodge
-                    switch (enAP)
+                    switch (enAP[i])
                     {
                         case "Attack":
-                            if (i == 0)
+                            if (rnd == 0)
                             {
                                 Console.WriteLine($"You dodged {enName} attack!");
                                 Console.WriteLine("\n---press Enter---");
                                 Console.ReadKey();
                             }
-                            else if (i == 1)
+                            else if (rnd == 1)
                             {
                                 Console.WriteLine($"You manage to get away from {enName} attack");
                                 Console.WriteLine("\n---press Enter---");
@@ -240,7 +241,7 @@ namespace TextQuestGame
                             else
                             {
                                 int ddPL = DDAtack(enDMG, plArmor);
-                                GameMainCode.playerStats.playerHP -= ddPL;
+                                Master.playerStats.playerHP -= ddPL;
                                 Console.WriteLine($"{enName} charges and manage to get you and deal {ddPL} damage");
                                 Console.WriteLine("\n---press Enter---");
                                 Console.ReadKey();
@@ -260,27 +261,26 @@ namespace TextQuestGame
                 }
                 else if ((inputValue == "4") && (plPotion > 0))
                 {
-                    int i = random.Next(0, 3);
                     //potion
-                    switch (enAP)
+                    switch (enAP[i])
                     {
                         case "Attack":
                             int ddPL = DDCRITAtack(enDMG, plArmor);
-                            GameMainCode.playerStats.playerHP -= ddPL;
+                            Master.playerStats.playerHP -= ddPL;
                             Console.WriteLine($"As {enName} attack, you open yourself looking for a potion\n" +
                                 $"Enemy get's you and lends CRITICAL hit dealing {ddPL} damage");
                             Console.WriteLine("\n---press Enter---");
                             Console.ReadKey();
                             break;
                         case "Deffend":
-                            GameMainCode.playerStats.playerHP += 5;
+                            Master.playerStats.playerHP += 5;
                             plPotion--;
                             Console.WriteLine($"You health if healed by 5 points");
                             Console.WriteLine("\n---press Enter---");
                             Console.ReadKey();
                             break;
                         case "Dodge":
-                            GameMainCode.playerStats.playerHP += 5;
+                            Master.playerStats.playerHP += 5;
                             plPotion--;
                             Console.WriteLine($"You health if healed by 5 points");
                             Console.WriteLine("\n---press Enter---");
@@ -290,13 +290,12 @@ namespace TextQuestGame
                 }
                 else if ((inputValue == "4") && (plPotion == 0))
                 {
-                    int i = random.Next(0, 3);
-                    //potion
-                    switch (enAP)
+                    //no potion
+                    switch (enAP[i])
                     {
                         case "Attack":
                             int ddPL = DDCRITAtack(enDMG, plArmor);
-                            GameMainCode.playerStats.playerHP -= ddPL;
+                            Master.playerStats.playerHP -= ddPL;
                             Console.WriteLine($"As {enName} attack, you open yourself looking for a potion\n" +
                                 $"Enemy get's you and lends CRITICAL hit dealing {ddPL} damage");
                             Console.WriteLine("\n---press Enter---");
@@ -316,11 +315,11 @@ namespace TextQuestGame
                 }
                 else
                 {
-                    switch (enAP)
+                    switch (enAP[i])
                     {
                         case "Attack":
                             int ddPL = DDCRITAtack(enDMG, plArmor);
-                            GameMainCode.playerStats.playerHP -= ddPL;
+                            Master.playerStats.playerHP -= ddPL;
                             Console.WriteLine($"As {enName} attack, you just stand and watch how\n" +
                                 $"enemy get's you and lends CRITICAL hit dealing {ddPL} damage");
                             Console.WriteLine("\n---press Enter---");
@@ -339,8 +338,10 @@ namespace TextQuestGame
                     }
                 }
 
+                i++;
+
                 //Win System
-                if (GameMainCode.playerStats.playerHP <= 0)
+                if (Master.playerStats.playerHP <= 0)
                 {
                     Console.Clear();
                     Console.WriteLine("=======PLAYER IS DEAD=======\n\n\n");
@@ -354,7 +355,7 @@ namespace TextQuestGame
                 {
                     Console.Clear();
                     int plEX = random.Next(10, 21);
-                    GameMainCode.playerStats.playerXP += plEX;
+                    Master.playerStats.playerXP += plEX;
                     enCount -= 1;
                     if(enCount > 0) enHP = enemyHP;
                     Console.WriteLine($"======={enName} is DEFEATED!=======\n||");
@@ -366,49 +367,49 @@ namespace TextQuestGame
                 }
 
                 //LevelUp Check
-                if (GameMainCode.playerStats.playerXP >= plLvl2XP && GameMainCode.playerStats.playerLevel == 1)
+                if (Master.playerStats.playerXP >= plLvl2XP && Master.playerStats.playerLevel == 1)
                 {
-                    GameMainCode.playerStats.playerLevel = 2;
-                    GameMainCode.playerStats.playerDMG++;
-                    GameMainCode.playerStats.playerArmor++;
-                    GameMainCode.playerStats.plMaxHP += 5;
+                    Master.playerStats.playerLevel = 2;
+                    Master.playerStats.playerDMG++;
+                    Master.playerStats.playerArmor++;
+                    Master.playerStats.plMaxHP += 5;
                     LevelUpText();
                 }
-                else if (GameMainCode.playerStats.playerXP >= plLvl3XP && GameMainCode.playerStats.playerLevel == 2)
+                else if (Master.playerStats.playerXP >= plLvl3XP && Master.playerStats.playerLevel == 2)
                 {
-                    GameMainCode.playerStats.playerLevel = 3;
-                    GameMainCode.playerStats.playerDMG++;
-                    GameMainCode.playerStats.playerArmor++;
-                    GameMainCode.playerStats.plMaxHP += 5;
+                    Master.playerStats.playerLevel = 3;
+                    Master.playerStats.playerDMG++;
+                    Master.playerStats.playerArmor++;
+                    Master.playerStats.plMaxHP += 5;
                     LevelUpText();
                 }
-                else if (GameMainCode.playerStats.playerXP >= plLvl4XP && GameMainCode.playerStats.playerLevel == 3)
+                else if (Master.playerStats.playerXP >= plLvl4XP && Master.playerStats.playerLevel == 3)
                 {
-                    GameMainCode.playerStats.playerLevel = 4;
-                    GameMainCode.playerStats.playerDMG++;
-                    GameMainCode.playerStats.playerArmor++;
-                    GameMainCode.playerStats.plMaxHP += 5;
+                    Master.playerStats.playerLevel = 4;
+                    Master.playerStats.playerDMG++;
+                    Master.playerStats.playerArmor++;
+                    Master.playerStats.plMaxHP += 5;
                     LevelUpText();
                 }
-                else if (GameMainCode.playerStats.playerXP >= plLvl5XP && GameMainCode.playerStats.playerLevel == 4)
+                else if (Master.playerStats.playerXP >= plLvl5XP && Master.playerStats.playerLevel == 4)
                 {
-                    GameMainCode.playerStats.playerLevel = 5;
-                    GameMainCode.playerStats.playerDMG++;
-                    GameMainCode.playerStats.playerArmor++;
-                    GameMainCode.playerStats.plMaxHP += 5;
+                    Master.playerStats.playerLevel = 5;
+                    Master.playerStats.playerDMG++;
+                    Master.playerStats.playerArmor++;
+                    Master.playerStats.plMaxHP += 5;
                     LevelUpText();
                 }
             }
         }
         static void LevelUpText()
         {
-            GameMainCode.playerStats.playerHP = GameMainCode.playerStats.plMaxHP;
+            Master.playerStats.playerHP = Master.playerStats.plMaxHP;
             Console.Clear();
             Console.WriteLine($"=======LEVEL UP!=======\n||");
-            Console.WriteLine($"||   You are now LVL {GameMainCode.playerStats.playerLevel}!");
-            Console.WriteLine($"|| Your HP is now: {GameMainCode.playerStats.plMaxHP}");
-            Console.WriteLine($"|| Your ARMOR is now: {GameMainCode.playerStats.playerArmor}");
-            Console.WriteLine($"|| Your DMG is now: {GameMainCode.playerStats.playerDMG}");
+            Console.WriteLine($"||   You are now LVL {Master.playerStats.playerLevel}!");
+            Console.WriteLine($"|| Your HP is now: {Master.playerStats.plMaxHP}");
+            Console.WriteLine($"|| Your ARMOR is now: {Master.playerStats.playerArmor}");
+            Console.WriteLine($"|| Your DMG is now: {Master.playerStats.playerDMG}");
             Console.WriteLine($"===================================\n\n");
             Console.WriteLine("------press Enter to continue------");
             Console.ReadKey();
