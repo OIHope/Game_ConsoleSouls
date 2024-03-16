@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TextQuestGame")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c33534cae54686156356dd6ba1ad979238efa213")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7b64a42c04fbd8078c137280c7d2229f43e32682")]
 [assembly: System.Reflection.AssemblyProductAttribute("TextQuestGame")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TextQuestGame")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

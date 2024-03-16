@@ -79,6 +79,11 @@ namespace TextQuestGame
                     Console.ReadKey();
                     Console.WriteLine("And due to the torch light you see blades shining.");
                     Console.ReadKey();
+                    Console.WriteLine("Also you spot a potion right before you.");
+                    Console.ReadKey();
+                    Console.WriteLine("--- You get +1 Potion ---");
+                    Master.playerStats.playerPotions++;
+                    Console.ReadKey();
                     break;
                 }
                 else if (tempInput == "2")
@@ -110,7 +115,7 @@ namespace TextQuestGame
             Console.Clear();
 
             int[] tmpAP = { 0, 2, 0, 0, 2 };
-            CombatMechanic.Combat(false, "Creature", 8, 2, 0, 5, tmpAP);
+            CombatMechanic.Combat(false, "Creature", 35, 15, 2, 2, tmpAP, 20);
         }
     }
 }

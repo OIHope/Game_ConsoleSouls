@@ -8,19 +8,19 @@ namespace TextQuestGame
 {
     public class PlayerStats
     {
-        public int playerHP = 10;
-        public int playerArmor = 0;
-        public int playerDMG = 2;
-        public int playerPotions = 1;
+        public int playerHP = 50;
+        public int plMaxHP = 50;
+
+        public int playerArmor = 5;
+        public int playerDMG = 10;
+
+        public int playerPotions = 2;
+        public int potionHeal = 20;
 
         public int playerXP = 0;
         public int playerLevel = 1;
 
-        public int plMaxHP = 10;
+        public int xpToLevelUP = 50;
 
-        public int xpLvl2 = 10;
-        public int xpLvl3 = 25;
-        public int xpLvl4 = 45;
-        public int xpLvl5 = 70;
     }
 }

@@ -54,7 +54,7 @@ namespace TextQuestGame
                     Console.ReadKey();
 
                     int[] tmpAP = {0,0,1,0,1 };
-                    CombatMechanic.Combat(false, "Tavern Thug", 10, 2, 0, 2, tmpAP);
+                    CombatMechanic.Combat(false, "Tavern Thug", 35, 8, 3, 1, tmpAP, 15);
 
                     Console.Clear();
                     Console.WriteLine("You look and this poor guy and feel that people are about to attack you.");
@@ -62,6 +62,9 @@ namespace TextQuestGame
                     Console.WriteLine("But right before some thugs stood up to beat your soul,");
                     Console.ReadKey();
                     Console.WriteLine("the tavern keeper called you. So you go to the bar...");
+                    Console.ReadKey();
+                    Console.WriteLine("--- You get +1 Potion ---");
+                    Master.playerStats.playerPotions++;
                     Console.ReadKey();
                     break;
                 }
