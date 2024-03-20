@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextQuestGame
+namespace ConsoleSouls
 {
     class Event01TavernStart
     {
@@ -16,7 +16,7 @@ namespace TextQuestGame
             Console.Clear();
             Console.WriteLine("Doors open and you enter a small but crowded room of city tavern. All the attention is yours.");
             Console.ReadKey();
-            Console.WriteLine("Speaks get quieter, plates stop spanking, peoples eyes are on your back.");
+            Console.WriteLine("Speaks get quieter, plates stop spanking, peoples eyes are on you.");
             Console.ReadKey();
 
             bool startEvent = true;
@@ -62,9 +62,7 @@ namespace TextQuestGame
                     Console.ReadKey();
                     Console.WriteLine("the tavern keeper called you. So you go to the bar...");
                     Console.ReadKey();
-                    Console.WriteLine("--- You get +1 Potion ---");
-                    Master.playerStats.playerPotions++;
-                    Console.ReadKey();
+                    GetInterface.PlayerGivePotion();
                     break;
                 }
                 else if (tempInput == "2" && waitEvent < 2)

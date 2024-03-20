@@ -1,4 +1,4 @@
-﻿namespace TextQuestGame
+﻿namespace ConsoleSouls
 {
     class Master
     {

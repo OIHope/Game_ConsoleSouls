@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextQuestGame
+namespace ConsoleSouls
 {
     class Event02TavernTalk
     {
@@ -13,19 +13,19 @@ namespace TextQuestGame
             string event02result = "";
 
             Console.Clear();
-            Console.WriteLine("- So it's you, - says the tavern keeper, - the hunters guild member.");
+            Console.WriteLine("- So it's you, - says the tavern keeper, - the hunters guild rookie.");
             Console.ReadKey();
             Console.WriteLine("     He looks at you and seems kind of dissapoined.");
             Console.ReadKey();
             Console.WriteLine("- I'll be honest with you, - his face frowned, - I didn't expect you to be so... weak.");
             Console.ReadKey();
-            Console.WriteLine("The guild told me they'd send me a real hunted, but not a scumbag like you.");
+            Console.WriteLine("The guild told me they'd send me a rookie, but not a scumbag like you.");
             Console.ReadKey();
-            Console.WriteLine("- Just tell me about the job, - you speak in deep and calm voice, - and I'll go.");
+            Console.WriteLine("- Just tell me why I'm here, - you speak in deep and calm voice.");
             Console.ReadKey();
             Console.WriteLine("     The keeper seems surprised to hear you be so confident. A litle smile appears on his face.");
             Console.ReadKey();
-            Console.WriteLine("- Good. Let's get to the gig. - He puts a plate he've been rubbing aside and invites you to follow.");
+            Console.WriteLine("- Good. Follow me. - He puts a plate he've been rubbing aside and invites you to follow.");
             Console.ReadKey();
             Console.Clear();
 
@@ -115,7 +115,7 @@ namespace TextQuestGame
             Console.Clear();
 
             int[] tmpAP = { 0, 2, 0, 0, 2 };
-            CombatMechanic.Combat(false, "Creature", 35, 15, 2, 2, tmpAP, 20);
+            CombatMechanic.Combat(false, "Creature", 25, 10, 2, 2, tmpAP, 25);
         }
     }
 }

@@ -1,0 +1,15 @@
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\bin\Debug\net8.0\ConsoleSouls.exe
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\bin\Debug\net8.0\ConsoleSouls.deps.json
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\bin\Debug\net8.0\ConsoleSouls.runtimeconfig.json
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\bin\Debug\net8.0\ConsoleSouls.dll
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\bin\Debug\net8.0\ConsoleSouls.pdb
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\obj\Debug\net8.0\ConsoleSouls.GeneratedMSBuildEditorConfig.editorconfig
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\obj\Debug\net8.0\ConsoleSouls.AssemblyInfoInputs.cache
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\obj\Debug\net8.0\ConsoleSouls.AssemblyInfo.cs
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\obj\Debug\net8.0\ConsoleSouls.csproj.CoreCompileInputs.cache
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\obj\Debug\net8.0\ConsoleSouls.sourcelink.json
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\obj\Debug\net8.0\ConsoleSouls.dll
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\obj\Debug\net8.0\refint\ConsoleSouls.dll
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\obj\Debug\net8.0\ConsoleSouls.pdb
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\obj\Debug\net8.0\ConsoleSouls.genruntimeconfig.cache
+E:\VARTO_COURSE\git_rep\Game_ConsoleSouls\TextQuestGame\TextQuestGame\obj\Debug\net8.0\ref\ConsoleSouls.dll

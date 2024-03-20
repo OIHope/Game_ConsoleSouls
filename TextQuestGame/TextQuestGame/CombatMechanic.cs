@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Linq;
 
-namespace TextQuestGame
+namespace ConsoleSouls
 {
 
     class CombatMechanic
@@ -17,10 +17,11 @@ namespace TextQuestGame
             if (randomEnemy)
             {
                 CombatMechanic.enemyStats.enemyName = GetEnemyName(random.Next(0,7));
-                CombatMechanic.enemyStats.enemyHP = random.Next(40,86);
-                CombatMechanic.enemyStats.enemyDMG = random.Next(10, 26);
-                CombatMechanic.enemyStats.enemyArmor = random.Next(5, 21);
-                CombatMechanic.enemyStats.expForWin = random.Next(15, 31);
+                CombatMechanic.enemyStats.enemyHP = (int)((random.Next(25, 46) * Master.playerStats.playerLevel) * 0.55);
+                CombatMechanic.enemyStats.enemyDMG = (int)((random.Next(10, 21) * Master.playerStats.playerLevel) * 0.55);
+                CombatMechanic.enemyStats.enemyArmor = (int)((random.Next(3, 11) * Master.playerStats.playerLevel) * 0.55);
+                CombatMechanic.enemyStats.expForWin = (int)(random.Next(15, 51) * Master.playerStats.playerLevel);
+                CombatMechanic.enemyStats.enemyCount = count;
                 aP[0] = 0;
                 aP[1] = 0;
                 aP[2] = 1;
@@ -34,6 +35,7 @@ namespace TextQuestGame
                 CombatMechanic.enemyStats.enemyDMG = enemyDMG;
                 CombatMechanic.enemyStats.enemyArmor = enemyArmor;
                 CombatMechanic.enemyStats.expForWin = expWin;
+                CombatMechanic.enemyStats.enemyCount = count;
                 aP[0] = enemyPattern[0];
                 aP[1] = enemyPattern[1];
                 aP[2] = enemyPattern[2];
@@ -49,7 +51,7 @@ namespace TextQuestGame
                 enAP[j] = tmpName;
             }
             int i = 0;
-            ManageCombat(enAP[i], enemyHP);
+            ManageCombat(enAP, enemyHP);
         }
         static string GetEnemyName(int randomName)
             {
@@ -81,7 +83,7 @@ namespace TextQuestGame
                 }
                 return enemyRandName;
             }
-        static void ManageCombat(string enAP, int enemyHP)
+        static void ManageCombat(string[] enAP, int enemyHP)
         {
             int i = 0;
 
@@ -91,8 +93,8 @@ namespace TextQuestGame
                 ManagePlayer();
                 GetInterface.CombatInterface(CombatMechanic.enemyStats.enemyName,
                     CombatMechanic.enemyStats.enemyHP, CombatMechanic.enemyStats.enemyArmor,
-                    CombatMechanic.enemyStats.enemyDMG, enAP);
-                PlayerAction(enAP);
+                    CombatMechanic.enemyStats.enemyDMG, enAP, i);
+                PlayerAction(enAP, i);
                 i++;
                 ManageRound(enemyHP);
             }
@@ -136,42 +138,42 @@ namespace TextQuestGame
             Console.ReadKey();
             Environment.Exit(0);
         }
-        static void PlayerAction(string enAP)
+        static void PlayerAction(string[] enAP, int i)
         {
             string inputValue = Console.ReadLine();
             Console.WriteLine("");
 
             if (inputValue == "1")
             {
-                PlayerAttack(enAP);
+                PlayerAttack(enAP, i);
             }
             else if (inputValue == "2")
             {
-                PlayerDeffend(enAP);
+                PlayerDeffend(enAP, i);
             }
             else if (inputValue == "3")
             {
-                PlayerDodge(enAP);
+                PlayerDodge(enAP, i);
             }
             else if ((inputValue == "4") && (Master.playerStats.playerPotions > 0))
             {
-                PlayerPotion(enAP);
+                PlayerPotion(enAP, i);
             }
             else if ((inputValue == "4") && (Master.playerStats.playerPotions == 0))
             {
-                PlayerNoPotion(enAP);
+                PlayerNoPotion(enAP, i);
             }
             else
             {
-                PlayerStand(enAP);
+                PlayerStand(enAP, i);
             }
         }
-        static void PlayerAttack(string enAP)
+        static void PlayerAttack(string[] enAP, int i)
         {
             Random random = new Random();
             int rnd = random.Next(0, 101);
 
-            switch (enAP)
+            switch (enAP[i])
             {
                 case "Attack":
                     if ((rnd >= 0) && (rnd <= 75))
@@ -205,7 +207,7 @@ namespace TextQuestGame
                     }
                     break;
                 case "Deffend":
-                    if ((rnd >= 0) && (rnd <= 51))
+                    if ((rnd >= 0) && (rnd <= 76))
                     {
                         int ddEN = DDDefend(Master.playerStats.playerDMG, CombatMechanic.enemyStats.enemyArmor);
                         CombatMechanic.enemyStats.enemyHP -= ddEN;
@@ -225,13 +227,13 @@ namespace TextQuestGame
                     }
                     break;
                 case "Dodge":
-                    if ((rnd >= 0) && (rnd <= 75))
+                    if ((rnd >= 0) && (rnd <= 50))
                     {
                         Console.WriteLine($"{CombatMechanic.enemyStats.enemyName} dogded you attack!");
                         Console.WriteLine("\n---press Enter---");
                         Console.ReadKey();
                     }
-                    else if ((rnd >= 76) && (rnd <= 95))
+                    else if ((rnd >= 51) && (rnd <= 95))
                     {
                         int ddEN = DDAtack(Master.playerStats.playerDMG, CombatMechanic.enemyStats.enemyArmor);
                         CombatMechanic.enemyStats.enemyHP -= ddEN;
@@ -250,12 +252,12 @@ namespace TextQuestGame
                     break;
             }
         }
-        static void PlayerDeffend(string enAP)
+        static void PlayerDeffend(string[] enAP, int i)
         {
             Random random = new Random();
             int rnd = random.Next(0, 101);
 
-            switch (enAP)
+            switch (enAP[i])
             {
                 case "Attack":
                     if ((rnd >= 0) && (rnd <= 30))
@@ -287,11 +289,11 @@ namespace TextQuestGame
                     break;
             }
         }
-        static void PlayerDodge(string enAP)
+        static void PlayerDodge(string[] enAP, int i)
         {
             Random random = new Random();
             int rnd = random.Next(0, 101);
-            switch (enAP)
+            switch (enAP[i])
             {
                 case "Attack":
                     if ((rnd >= 0) && (rnd <= 85))
@@ -329,9 +331,9 @@ namespace TextQuestGame
                     break;
             }
         }
-        static void PlayerPotion(string enAP)
+        static void PlayerPotion(string[] enAP, int i)
         {
-            switch (enAP)
+            switch (enAP[i])
             {
                 case "Attack":
                     int ddPL = DDCRITAtack(CombatMechanic.enemyStats.enemyDMG, Master.playerStats.playerArmor);
@@ -344,22 +346,18 @@ namespace TextQuestGame
                 case "Deffend":
                     Master.playerStats.playerHP += Master.playerStats.potionHeal;
                     Master.playerStats.playerPotions--;
-                    Console.WriteLine($"You health if healed by 5 points");
-                    Console.WriteLine("\n---press Enter---");
-                    Console.ReadKey();
+                    GetInterface.CombatUsePotion();
                     break;
                 case "Dodge":
                     Master.playerStats.playerHP += Master.playerStats.potionHeal;
                     Master.playerStats.playerPotions--;
-                    Console.WriteLine($"You health if healed by 5 points");
-                    Console.WriteLine("\n---press Enter---");
-                    Console.ReadKey();
+                    GetInterface.CombatUsePotion();
                     break;
             }
         }
-        static void PlayerNoPotion(string enAP)
+        static void PlayerNoPotion(string[] enAP, int i)
         {
-            switch (enAP)
+            switch (enAP[i])
             {
                 case "Attack":
                     int ddPL = DDCRITAtack(CombatMechanic.enemyStats.enemyDMG, Master.playerStats.playerArmor);
@@ -370,20 +368,16 @@ namespace TextQuestGame
                     Console.ReadKey();
                     break;
                 case "Deffend":
-                    Console.WriteLine($"You reach the pocket, but fine nothing in there!");
-                    Console.WriteLine("\n---press Enter---");
-                    Console.ReadKey();
+                    GetInterface.CombaNoPotion();
                     break;
                 case "Dodge":
-                    Console.WriteLine($"You reach the pocket, but fine nothing in there!");
-                    Console.WriteLine("\n---press Enter---");
-                    Console.ReadKey();
+                    GetInterface.CombaNoPotion();
                     break;
             }
         }
-        static void PlayerStand(string enAP)
+        static void PlayerStand(string[] enAP, int i)
         {
-            switch (enAP)
+            switch (enAP[i])
             {
                 case "Attack":
                     int ddPL = DDCRITAtack(CombatMechanic.enemyStats.enemyDMG, Master.playerStats.playerArmor);

@@ -13,9 +13,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\VARTO_COURSE\\git_rep\\Game_ConsoleSouls\\TextQuestGame\\TextQuestGame\\TextQuestGame.csproj",
-      "projectName": "TextQuestGame",
-      "projectPath": "E:\\VARTO_COURSE\\git_rep\\Game_ConsoleSouls\\TextQuestGame\\TextQuestGame\\TextQuestGame.csproj",
+      "projectUniqueName": "E:\\VARTO_COURSE\\git_rep\\Game_ConsoleSouls\\TextQuestGame\\TextQuestGame\\ConsoleSouls.csproj",
+      "projectName": "ConsoleSouls",
+      "projectPath": "E:\\VARTO_COURSE\\git_rep\\Game_ConsoleSouls\\TextQuestGame\\TextQuestGame\\ConsoleSouls.csproj",
       "packagesPath": "C:\\Users\\oimod\\.nuget\\packages\\",
       "outputPath": "E:\\VARTO_COURSE\\git_rep\\Game_ConsoleSouls\\TextQuestGame\\TextQuestGame\\obj\\",
       "projectStyle": "PackageReference",
