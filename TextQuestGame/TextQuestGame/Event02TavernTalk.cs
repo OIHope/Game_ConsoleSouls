@@ -68,7 +68,7 @@ namespace TextQuestGame
             {
                 Console.Clear();
                 Console.WriteLine("This thing is watching you...\n");
-                Console.WriteLine("===== Actions:");
+                GetInterface.PromptAction();
                 Console.WriteLine("(1) Look around");
                 Console.WriteLine("(2) Attack the creature\n");
                 string tempInput = Console.ReadLine();

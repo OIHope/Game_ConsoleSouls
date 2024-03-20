@@ -23,4 +23,15 @@ namespace TextQuestGame
         public int xpToLevelUP = 50;
 
     }
+    public class EnemyStats
+    {
+        public string enemyName = "";
+
+        public int enemyHP;
+        public int enemyArmor;
+        public int enemyDMG;
+
+        public int expForWin;
+        public int enemyCount;
+    }
 }

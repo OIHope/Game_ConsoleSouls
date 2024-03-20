@@ -10,11 +10,10 @@ namespace TextQuestGame
     {
         public static void EventStart()
         {
-            Console.WriteLine("====CONSOLE SOULS====\n\n");
-            Console.WriteLine("press Enter to start");
-            Console.ReadKey();
-            Console.Clear();
+            GetInterface.GameName();
+            GetInterface.PromptPressEnter();
 
+            Console.Clear();
             Console.WriteLine("Doors open and you enter a small but crowded room of city tavern. All the attention is yours.");
             Console.ReadKey();
             Console.WriteLine("Speaks get quieter, plates stop spanking, peoples eyes are on your back.");
@@ -26,7 +25,7 @@ namespace TextQuestGame
             while (startEvent = true)
             {
                 Console.Clear();
-                Console.WriteLine("===== Actions:");
+                GetInterface.PromptAction();
                 Console.WriteLine("(1) Look around");
                 Console.WriteLine("(2) Go to the bar\n");
                 string tempInput = Console.ReadLine();
