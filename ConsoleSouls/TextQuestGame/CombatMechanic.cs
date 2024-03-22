@@ -14,6 +14,8 @@ namespace ConsoleSouls
             int[] aP = new int[enemyPattern.Length];
             string[] enAP = new string[enemyPattern.Length];
 
+            ResetEnemy();
+
             enemyStats.enemyName = enemyName;
             enemyStats.enemyMaxHP = enemyHP;
             enemyStats.enemyHP = enemyStats.enemyMaxHP;
@@ -42,6 +44,8 @@ namespace ConsoleSouls
 
             int[] aP = new int[7];
             string[] enAP = new string[7];
+
+            ResetEnemy();
 
             enemyStats.enemyName = GetEnemyName(random.Next(0, 7));
             enemyStats.enemyMaxHP = (int)((random.Next(25, 46) * Master.playerStats.playerLevel) * 0.55);
@@ -118,10 +122,12 @@ namespace ConsoleSouls
 
             if (enemyStats.enemyHP <= 0)
             {
+
                 Console.Clear();
                 Master.playerStats.playerXP += enemyStats.expForWin;
                 enemyStats.enemyCount -= 1;
-                if (enemyStats.enemyCount > 0) enemyStats.enemyHP = enemyStats.enemyMaxHP;
+                if (enemyStats.enemyCount > 0)
+                    ResetEnemy();
                 GetInterface.CombatEnemyDefeat(enemyStats.enemyName, enemyStats.expForWin);
             }
 
@@ -132,6 +138,8 @@ namespace ConsoleSouls
         {
             if (Master.playerStats.playerHP > Master.playerStats.plMaxHP) Master.playerStats.playerHP = Master.playerStats.plMaxHP;
             if (Master.playerStats.playerPotions < 0) Master.playerStats.playerPotions = 0;
+            if (Master.playerStats.bleedTimer < 0) Master.playerStats.bleedTimer = 0;
+            if (!Master.playerStats.bleed) Master.playerStats.bleedTimer = 0;
         }
         static void ManageLevelUp()
         {
@@ -148,6 +156,13 @@ namespace ConsoleSouls
             GetInterface.GameOver();
             Console.ReadKey();
             Environment.Exit(0);
+        }
+        static void ResetEnemy()
+        {
+            enemyStats.enemyHP = enemyStats.enemyMaxHP;
+            enemyStats.bleed = false;
+            enemyStats.bleedTimer = 0;
+            enemyStats.status = "Normal";
         }
         static void PlayerAction(string[] enAP, int i)
         {
@@ -183,7 +198,8 @@ namespace ConsoleSouls
                         int enHit = DamageEnemyLow();
                         Console.WriteLine($"Player is hit by {plHit} DMG\n" +
                             $"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(1, "player");
+                        BleedingApply(1, "enemy");
                         break;
                     }
                 case "Slash Attack":
@@ -192,7 +208,8 @@ namespace ConsoleSouls
                         int enHit = DamageEnemyMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG\n" +
                             $"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(1, "player");
+                        BleedingApply(25, "enemy");
                         break;
                     }
                 case "High Attack":
@@ -201,30 +218,32 @@ namespace ConsoleSouls
                         int enHit = DamageEnemyLow();
                         Console.WriteLine($"Player is hit by {plHit} DMG\n" +
                             $"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(25, "player");
+                        BleedingApply(1, "enemy");
                         break;
+
                     }
                 case "Block":
                     {
                         int enHit = DamageEnemyBlockLow();
                         Console.WriteLine($"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Dodge":
                     {
                         int enHit = DamageEnemyBlockHigh();
                         Console.WriteLine($"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(5, "enemy");
                         break;
                     }
                 case "Parry":
                     {
                         Console.WriteLine($"{enemyStats.enemyName} takes NO DMG");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
             }
+            BleedingCheck();
+            GetInterface.PromptPressEnter();
         }
         static void PlayerSlashAttack(string[] enAP, int i)
         {
@@ -236,7 +255,8 @@ namespace ConsoleSouls
                         int enHit = DamageEnemyLow();
                         Console.WriteLine($"Player is hit by {plHit} DMG\n" +
                             $"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(25, "player");
+                        BleedingApply(1, "enemy");
                         break;
                     }
                 case "Slash Attack":
@@ -245,7 +265,8 @@ namespace ConsoleSouls
                         int enHit = DamageEnemyLow();
                         Console.WriteLine($"Player is hit by {plHit} DMG\n" +
                             $"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(1, "player");
+                        BleedingApply(1, "enemy");
                         break;
                     }
                 case "High Attack":
@@ -254,13 +275,13 @@ namespace ConsoleSouls
                         int enHit = DamageEnemyMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG\n" +
                             $"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(1, "player");
+                        BleedingApply(25, "enemy");
                         break;
                     }
                 case "Block":
                     {
                         Console.WriteLine($"{enemyStats.enemyName} takes NO DMG");
-                        GetInterface.PromptPressEnter();
                         break;
                         
                     }
@@ -268,17 +289,18 @@ namespace ConsoleSouls
                     {
                         int enHit = DamageEnemyBlockLow();
                         Console.WriteLine($"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Parry":
                     {
                         int enHit = DamageEnemyBlockHigh();
                         Console.WriteLine($"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(5, "enemy");
                         break;
                     }
             }
+            BleedingCheck();
+            GetInterface.PromptPressEnter();
         }
         static void PlayerHighAttack(string[] enAP, int i)
         {
@@ -290,7 +312,8 @@ namespace ConsoleSouls
                         int enHit = DamageEnemyMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG\n" +
                             $"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(1, "player");
+                        BleedingApply(25, "enemy");
                         break;
                     }
                 case "Slash Attack":
@@ -299,7 +322,8 @@ namespace ConsoleSouls
                         int enHit = DamageEnemyLow();
                         Console.WriteLine($"Player is hit by {plHit} DMG\n" +
                             $"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(25, "player");
+                        BleedingApply(1, "enemy");
                         break;
                     }
                 case "High Attack":
@@ -308,30 +332,31 @@ namespace ConsoleSouls
                         int enHit = DamageEnemyLow();
                         Console.WriteLine($"Player is hit by {plHit} DMG\n" +
                             $"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(1, "player");
+                        BleedingApply(1, "enemy");
                         break;
                     }
                 case "Block":
                     {
                         int enHit = DamageEnemyBlockHigh();
                         Console.WriteLine($"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(5, "enemy");
                         break;
                     }
                 case "Dodge":
                     {
                         Console.WriteLine($"{enemyStats.enemyName} takes NO DMG");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Parry":
                     {
                         int enHit = DamageEnemyBlockLow();
                         Console.WriteLine($"{enemyStats.enemyName} is hit by {enHit} DMG");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
             }
+            BleedingCheck();
+            GetInterface.PromptPressEnter();
         }
         static void PlayerBlock(string[] enAP, int i)
         {
@@ -341,41 +366,38 @@ namespace ConsoleSouls
                     {
                         int plHit = DamagePlayerBlockLow();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Slash Attack":
                     {
                         Console.WriteLine($"Player takes NO DMG");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "High Attack":
                     {
                         int plHit = DamagePlayerBlockMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(5, "player");
                         break;
                     }
                 case "Block":
                     {
                         Console.WriteLine($"Nothing happens");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Dodge":
                     {
                         Console.WriteLine($"Nothing happens");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Parry":
                     {
                         Console.WriteLine($"Nothing happens");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
             }
+            BleedingCheck();
+            GetInterface.PromptPressEnter();
         }
         static void PlayerDodge(string[] enAP, int i)
         {
@@ -385,41 +407,38 @@ namespace ConsoleSouls
                     {
                         int plHit = DamagePlayerBlockMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(5, "player");
                         break;
                     }
                 case "Slash Attack":
                     {
                         int plHit = DamagePlayerBlockLow();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "High Attack":
                     {
                         Console.WriteLine($"Player takes NO DMG");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Block":
                     {
                         Console.WriteLine($"Nothing happens");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Dodge":
                     {
                         Console.WriteLine($"Nothing happens");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Parry":
                     {
                         Console.WriteLine($"Nothing happens");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
             }
+            BleedingCheck();
+            GetInterface.PromptPressEnter();
         }
         static void PlayerParry(string[] enAP, int i)
         {
@@ -428,42 +447,39 @@ namespace ConsoleSouls
                 case "Low Attack":
                     {
                         Console.WriteLine($"Player takes NO DMG");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Slash Attack":
                     {
                         int plHit = DamagePlayerBlockMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(5, "player");
                         break;
                     }
                 case "High Attack":
                     {
                         int plHit = DamagePlayerBlockLow();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Block":
                     {
                         Console.WriteLine($"Nothing happens");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Dodge":
                     {
                         Console.WriteLine($"Nothing happens");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Parry":
                     {
                         Console.WriteLine($"Nothing happens");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
             }
+            BleedingCheck();
+            GetInterface.PromptPressEnter();
         }
         static void PlayerPotion(string[] enAP, int i)
         {
@@ -473,21 +489,21 @@ namespace ConsoleSouls
                     {
                         int plHit = DamagePlayerMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(40, "player");
                         break;
                     }
                 case "Slash Attack":
                     {
                         int plHit = DamagePlayerMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(40, "player");
                         break;
                     }
                 case "High Attack":
                     {
                         int plHit = DamagePlayerMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(40, "player");
                         break;
                     }
                 case "Block":
@@ -506,6 +522,8 @@ namespace ConsoleSouls
                         break;
                     }
             }
+            BleedingCheck();
+            GetInterface.PromptPressEnter();
         }
         static void PlayerNoPotion(string[] enAP, int i)
         {
@@ -515,21 +533,21 @@ namespace ConsoleSouls
                     {
                         int plHit = DamagePlayerMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(40, "player");
                         break;
                     }
                 case "Slash Attack":
                     {
                         int plHit = DamagePlayerMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(40, "player");
                         break;
                     }
                 case "High Attack":
                     {
                         int plHit = DamagePlayerMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(40, "player");
                         break;
                     }
                 case "Block":
@@ -548,6 +566,8 @@ namespace ConsoleSouls
                         break;
                     }
             }
+            BleedingCheck();
+            GetInterface.PromptPressEnter();
         }
         static void PlayerStand(string[] enAP, int i)
         {
@@ -557,42 +577,41 @@ namespace ConsoleSouls
                     {
                         int plHit = DamagePlayerMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(80, "player");
                         break;
                     }
                 case "Slash Attack":
                     {
                         int plHit = DamagePlayerMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(80, "player");
                         break;
                     }
                 case "High Attack":
                     {
                         int plHit = DamagePlayerMax();
                         Console.WriteLine($"Player is hit by {plHit} DMG");
-                        GetInterface.PromptPressEnter();
+                        BleedingApply(80, "player");
                         break;
                     }
                 case "Block":
                     {
                         Console.WriteLine($"Nothing happens");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Dodge":
                     {
                         Console.WriteLine($"Nothing happens");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
                 case "Parry":
                     {
                         Console.WriteLine($"Nothing happens");
-                        GetInterface.PromptPressEnter();
                         break;
                     }
             }
+            BleedingCheck();
+            GetInterface.PromptPressEnter();
         }
         static int DamagePlayerLow()
         {
@@ -649,6 +668,50 @@ namespace ConsoleSouls
             if (hitDMG < 0) hitDMG = 0;
             enemyStats.enemyHP -= hitDMG;
             return hitDMG;
+        }
+        static void BleedingCheck()
+        {
+            if (Master.playerStats.bleedTimer == 0)
+            { 
+                Master.playerStats.bleed = false;
+                Master.playerStats.status = "Normal";
+            }
+            if (CombatMechanic.enemyStats.bleedTimer == 0)
+            {
+                CombatMechanic.enemyStats.bleed = false;
+                CombatMechanic.enemyStats.status = "Normal";
+            }
+            if (Master.playerStats.bleed)
+            {
+                Master.playerStats.status = "Bleeding";
+                Master.playerStats.playerHP -= Master.systemStats.bleedDamage;
+                Master.playerStats.bleedTimer--;
+                Console.WriteLine($"Player loses {Master.systemStats.bleedDamage}HP because of BLEEDING STATUS");
+            }
+            if (CombatMechanic.enemyStats.bleed)
+            {
+                CombatMechanic.enemyStats.status = "Bleeding";
+                CombatMechanic.enemyStats.enemyHP -= Master.systemStats.bleedDamage;
+                CombatMechanic.enemyStats.bleedTimer--;
+                Console.WriteLine($"{CombatMechanic.enemyStats.enemyName} loses {Master.systemStats.bleedDamage}HP because of BLEEDING STATUS");
+            }
+        }
+        static void BleedingApply(int chance, string victim)
+        {
+            Random random = new Random();
+            int bleedCheck = random.Next(0,101);
+            if ((bleedCheck <= chance) && (victim == "player"))
+            {
+                Master.playerStats.bleed = true;
+                Master.playerStats.bleedTimer += Master.systemStats.bleedTimer;
+                Console.WriteLine($"Player gain BLEEDING status for +{Master.systemStats.bleedTimer} turns!");
+            }
+            else if ((bleedCheck <= chance) && (victim == "enemy"))
+            {
+                CombatMechanic.enemyStats.bleed = true;
+                CombatMechanic.enemyStats.bleedTimer += Master.systemStats.bleedTimer;
+                Console.WriteLine($"{CombatMechanic.enemyStats.enemyName} gain BLEEDING status for +{Master.systemStats.bleedTimer} turns!");
+            }
         }
     }
 }

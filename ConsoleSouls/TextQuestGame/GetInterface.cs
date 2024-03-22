@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,10 @@ namespace ConsoleSouls
             Console.WriteLine($"    {enName} ||   Left: {CombatMechanic.enemyStats.enemyCount}");
             Console.WriteLine("===========================");
             Console.WriteLine($"||  HP = {enHP} ||  DMG = {enDMG}");
+            if (CombatMechanic.enemyStats.bleed)
+                Console.WriteLine($"||  Status: {CombatMechanic.enemyStats.status} will last for {CombatMechanic.enemyStats.bleedTimer} turns");
+            else
+                Console.WriteLine($"||  Status: {CombatMechanic.enemyStats.status}");
             Console.WriteLine($"||  Next move = {nextMove[i]}");
             Console.WriteLine("===========================");
             Console.WriteLine("\n       ---VS---\n");
@@ -35,6 +40,10 @@ namespace ConsoleSouls
             Console.WriteLine("===========================");
             Console.WriteLine($"||  HP = {Master.playerStats.playerHP}  ||  DMG = {Master.playerStats.playerDMG}");
             Console.WriteLine($"||  Potions = {Master.playerStats.playerPotions}");
+            if (Master.playerStats.bleed)
+                Console.WriteLine($"||  Status: {Master.playerStats.status} will last for {Master.playerStats.bleedTimer} turns");
+            else
+                Console.WriteLine($"||  Status: {Master.playerStats.status}");
             Console.WriteLine("===========================");
             Console.WriteLine("===Actions:\n");
             Console.WriteLine("(1) Low Attack");
@@ -47,16 +56,19 @@ namespace ConsoleSouls
         }
         public static void CombatUsePotion()
         {
-            Master.playerStats.playerHP += Master.playerStats.potionHeal;
+            Master.playerStats.playerHP += Master.systemStats.potionHeal;
             Master.playerStats.playerPotions--;
-            Console.WriteLine($"You health if healed by {Master.playerStats.potionHeal} points");
-            PromptPressEnter();
-            Console.ReadKey();
+            Console.WriteLine($"You health if healed by {Master.systemStats.potionHeal} points");
+            if (Master.playerStats.bleed)
+            {
+                Master.playerStats.bleed = false;
+                Master.playerStats.status = "Normal";
+                Console.WriteLine("Player is healed from BLEEDING STATUS");
+            }
         }
         public static void CombatNoPotion()
         {
             Console.WriteLine($"You reach the pocket, but fine nothing in there!");
-            PromptPressEnter();
         }
         public static void CombatEnemyDefeat(string enName, int expForWin)
         {

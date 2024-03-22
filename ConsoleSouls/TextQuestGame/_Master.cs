@@ -4,6 +4,7 @@
     {
         
         public static PlayerStats playerStats = new PlayerStats();
+        public static SystemStats systemStats = new SystemStats();
 
 
         static void Main(string[] args)
