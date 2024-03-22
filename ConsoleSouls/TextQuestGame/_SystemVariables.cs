@@ -11,7 +11,6 @@ namespace ConsoleSouls
         public int playerHP = 50;
         public int plMaxHP = 50;
 
-        public int playerArmor = 5;
         public int playerDMG = 10;
 
         public int playerPotions = 2;
@@ -27,8 +26,8 @@ namespace ConsoleSouls
     {
         public string enemyName = "";
 
+        public int enemyMaxHP;
         public int enemyHP;
-        public int enemyArmor;
         public int enemyDMG;
 
         public int expForWin;

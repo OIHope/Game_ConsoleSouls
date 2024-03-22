@@ -114,8 +114,8 @@ namespace ConsoleSouls
             Console.ReadKey();
             Console.Clear();
 
-            int[] tmpAP = { 0, 2, 0, 0, 2 };
-            CombatMechanic.Combat(false, "Creature", 25, 10, 2, 2, tmpAP, 25);
+            int[] tmpAP = {1,1,0,4,3,5,2,2,4};
+            CombatMechanic.Combat("Creature", 25, 10, 25, 3, tmpAP);
         }
     }
 }

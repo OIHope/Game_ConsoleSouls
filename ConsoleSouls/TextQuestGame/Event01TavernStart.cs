@@ -52,8 +52,8 @@ namespace ConsoleSouls
                     Console.WriteLine("This might not end well...");
                     Console.ReadKey();
 
-                    int[] tmpAP = {0,0,1,0,1 };
-                    CombatMechanic.Combat(false, "Tavern Thug", 35, 8, 3, 1, tmpAP, 15);
+                    int[] tmpAP = {2, 0, 4, 1, 4, 1};
+                    CombatMechanic.Combat("Tavern Thug", 35, 10, 25, 1, tmpAP);
 
                     Console.Clear();
                     Console.WriteLine("You look and this poor guy and feel that people are about to attack you.");
