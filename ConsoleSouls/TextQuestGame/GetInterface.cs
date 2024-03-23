@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -91,8 +92,7 @@ namespace ConsoleSouls
         public static void GameOver()
         {
             Console.Clear();
-            Console.WriteLine("=======PLAYER IS DEAD=======\n\n\n");
-            Console.WriteLine("----press Enter to repeat----\n");
+            Console.WriteLine("=======GAME OVER=======\n\n\n");
             Console.WriteLine("------press Esc to exit------");
         }
         public static void PlayerGivePotion()
@@ -100,6 +100,27 @@ namespace ConsoleSouls
             Console.WriteLine("\n--- You get +1 Potion ---\n");
             Master.playerStats.playerPotions++;
             Console.ReadKey();
+        }
+        public static void PlayerRecover()
+        {
+            Master.playerStats.playerHP = Master.playerStats.plMaxHP;
+            Master.playerStats.bleed = false;
+            Master.playerStats.bleedTimer = 0;
+            Master.playerStats.status = "Normal";
+            Console.WriteLine("\n==================================================");
+            Console.WriteLine("||   Your health and status has been recovered   ||");
+            Console.WriteLine("==================================================\n");
+            Console.ReadKey();
+
+        }
+        public static void CombatGetReady(string enName)
+        {
+            Console.WriteLine("\n==================WARNING!======================");
+            Console.WriteLine($"||   Get ready! Your enemy is {enName}   ");
+            Console.WriteLine("==================================================\n");
+            Console.WriteLine("=============PRESS (SPACEBAR) TO CONTINUE================\n");
+            while (Console.ReadKey().Key == ConsoleKey.Spacebar) { }
+
         }
         /*
         

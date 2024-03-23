@@ -6,6 +6,8 @@
         public int bleedTimer = 5;
         public int bleedDamage = 5;
         public int potionHeal = 20;
+
+        public string eventOn = "";
     }
     public class PlayerStats
     {

@@ -9,7 +9,7 @@ namespace ConsoleSouls
         public static EnemyStats enemyStats = new EnemyStats();
         public static void Combat(string enemyName, int enemyHP, int enemyDMG, int expWin, int count, int[] enemyPattern)
         {
-            Random random = new Random();
+            GetInterface.CombatGetReady(enemyName);
 
             int[] aP = new int[enemyPattern.Length];
             string[] enAP = new string[enemyPattern.Length];
@@ -36,11 +36,15 @@ namespace ConsoleSouls
                 enAP[j] = tmpName;
             }
             int i = 0;
-            ManageCombat(enAP);
+            if (Master.systemStats.eventOn == "training")
+                ManageCombatTraining(enAP);
+            else
+                ManageCombat(enAP);
         }
         public static void CombatRandom(int count)
         {
             Random random = new Random();
+
 
             int[] aP = new int[7];
             string[] enAP = new string[7];
@@ -54,6 +58,8 @@ namespace ConsoleSouls
             enemyStats.expForWin = (int)(random.Next(15, 51) * Master.playerStats.playerLevel);
             enemyStats.enemyCount = count;
 
+            GetInterface.CombatGetReady(enemyStats.enemyName);
+            
             for (int j = 0; j < aP.Length; j++)
             {
                 string tmpName = "";
@@ -114,6 +120,26 @@ namespace ConsoleSouls
                 i++;
                 ManageRound();
             }
+        }
+        static void ManageCombatTraining(string[] enAP)
+        {
+            int i = 0;
+            int roundCount = 0;
+
+            while ((enemyStats.enemyHP > 900) && (roundCount != 15) && (Master.playerStats.playerHP > 20))
+            {
+                if (i > enAP.Length - 1) i = 0;
+                ManagePlayer();
+                GetInterface.CombatInterface(enemyStats.enemyName,
+                    enemyStats.enemyHP,
+                    enemyStats.enemyDMG, enAP, i);
+                PlayerAction(enAP, i);
+                i++;
+                roundCount++;
+                ManageRound();
+            }
+            Master.systemStats.eventOn = "";
+
         }
         static void ManageRound()
         {
@@ -671,6 +697,20 @@ namespace ConsoleSouls
         }
         static void BleedingCheck()
         {
+            if (Master.playerStats.bleed && (Master.playerStats.bleedTimer > 0))
+            {
+                Master.playerStats.status = "Bleeding";
+                Master.playerStats.playerHP -= Master.systemStats.bleedDamage;
+                Master.playerStats.bleedTimer--;
+                Console.WriteLine($"Player loses {Master.systemStats.bleedDamage} HP because of BLEEDING STATUS");
+            }
+            if (CombatMechanic.enemyStats.bleed && (CombatMechanic.enemyStats.bleedTimer > 0))
+            {
+                CombatMechanic.enemyStats.status = "Bleeding";
+                CombatMechanic.enemyStats.enemyHP -= Master.systemStats.bleedDamage;
+                CombatMechanic.enemyStats.bleedTimer--;
+                Console.WriteLine($"{CombatMechanic.enemyStats.enemyName} loses {Master.systemStats.bleedDamage} HP because of BLEEDING STATUS");
+            }
             if (Master.playerStats.bleedTimer == 0)
             { 
                 Master.playerStats.bleed = false;
@@ -680,20 +720,6 @@ namespace ConsoleSouls
             {
                 CombatMechanic.enemyStats.bleed = false;
                 CombatMechanic.enemyStats.status = "Normal";
-            }
-            if (Master.playerStats.bleed)
-            {
-                Master.playerStats.status = "Bleeding";
-                Master.playerStats.playerHP -= Master.systemStats.bleedDamage;
-                Master.playerStats.bleedTimer--;
-                Console.WriteLine($"Player loses {Master.systemStats.bleedDamage}HP because of BLEEDING STATUS");
-            }
-            if (CombatMechanic.enemyStats.bleed)
-            {
-                CombatMechanic.enemyStats.status = "Bleeding";
-                CombatMechanic.enemyStats.enemyHP -= Master.systemStats.bleedDamage;
-                CombatMechanic.enemyStats.bleedTimer--;
-                Console.WriteLine($"{CombatMechanic.enemyStats.enemyName} loses {Master.systemStats.bleedDamage}HP because of BLEEDING STATUS");
             }
         }
         static void BleedingApply(int chance, string victim)

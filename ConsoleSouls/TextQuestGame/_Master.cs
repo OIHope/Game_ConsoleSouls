@@ -12,7 +12,7 @@
             //Test.TestMech();
             Event01TavernStart.EventStart();
             Event02TavernTalk.EventStart();
-            Event03GetStronger.GetStronger();
+            Event03BasementClean.BasementClean();
 
         }   
     }
